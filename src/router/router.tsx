@@ -29,7 +29,7 @@ const router = createBrowserRouter(
     },
     { path: "/login", element: <Login /> },
   ],
-  { basename: "/potholes/" },
+  { basename: "/potholes" },
 );
 
 export default router;
