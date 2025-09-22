@@ -5,6 +5,7 @@ import Login from "../pages/login";
 import ProtectedRoute from "../components/protected-route";
 import Leaderboard from "../pages/leaderboard";
 import Profile from "../pages/profile";
+import Capture from "../pages/capture";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "profile", element: <Profile /> },
+      { path: "capture", element: <Capture /> },
     ],
   },
   { path: "/login", element: <Login /> },
