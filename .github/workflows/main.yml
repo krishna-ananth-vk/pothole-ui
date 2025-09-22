@@ -1,0 +1,34 @@
+name: Deploy to server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env: # Pass env vars to build
+      VITE_REACT_APP_FIREBASE_API_KEY: ${{ secrets.VITE_REACT_APP_FIREBASE_API_KEY }}
+      VITE_REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_REACT_APP_FIREBASE_AUTH_DOMAIN }}
+      VITE_REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.VITE_REACT_APP_FIREBASE_PROJECT_ID }}
+      VITE_REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_REACT_APP_FIREBASE_STORAGE_BUCKET }}
+      VITE_REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_REACT_APP_FIREBASE_APP_ID: ${{ secrets.VITE_REACT_APP_FIREBASE_APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install and Build
+        run: |
+          yarn install
+          yarn build
+
+      - name: Deploy via SCP
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.LINODE_IP }}
+          username: ${{ secrets.LINODE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/"
+          target: "/opt/deployments/cvsnap/"
+          strip_components: 1
