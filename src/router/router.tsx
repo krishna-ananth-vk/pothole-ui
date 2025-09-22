@@ -7,26 +7,29 @@ import Leaderboard from "../pages/leaderboard";
 import Profile from "../pages/profile";
 import Capture from "../pages/capture";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/login" replace />,
-  },
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "leaderboard", element: <Leaderboard /> },
-      { path: "profile", element: <Profile /> },
-      { path: "capture", element: <Capture /> },
-    ],
-  },
-  { path: "/login", element: <Login /> },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Navigate to="/login" replace />,
+    },
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "dashboard", element: <Dashboard /> },
+        { path: "leaderboard", element: <Leaderboard /> },
+        { path: "profile", element: <Profile /> },
+        { path: "capture", element: <Capture /> },
+      ],
+    },
+    { path: "/login", element: <Login /> },
+  ],
+  { basename: "/potholes/" },
+);
 
 export default router;
