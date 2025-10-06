@@ -29,6 +29,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   resentVerification: () => Promise<boolean>;
+  updateUserProfile: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -93,6 +94,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return sendPasswordResetEmail(auth, email);
   };
 
+  const updateUserProfile = () => {};
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -114,6 +117,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         logout,
         resetPassword,
         resentVerification,
+        updateUserProfile,
       }}
     >
       {!loading && children}

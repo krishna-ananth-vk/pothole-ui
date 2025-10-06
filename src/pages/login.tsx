@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
-import { MapPin, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { WavesIcon, Mail, Lock, Eye, EyeOff } from "lucide-react";
 
 const Login: React.FC = () => {
   const { currentUser, signup, login, signInWithGoogle } = useAuth();
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
-            <MapPin className="w-8 h-8 text-white" />
+            <WavesIcon className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Patrol</h1>
           <p className="text-gray-600">
