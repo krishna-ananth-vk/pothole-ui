@@ -19,6 +19,7 @@ import {
   type UserCredential,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
+import { fetchLoggedInUserData } from "../services/auth-service";
 
 interface AuthContextType {
   currentUser: User | null;
@@ -53,8 +54,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await sendEmailVerification(result.user);
   };
 
-  const login = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const getLoggedInUser = async (loggedInUser: User) => {
+    const idTokeen = await loggedInUser.getIdToken();
+    const userInfo = await fetchLoggedInUserData(idTokeen);
+    console.log("auth_context_userInfo", userInfo);
+  };
+
+  const login = async (email: string, password: string) => {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+    getLoggedInUser(userCredential.user);
+    console.log("auth_context_userCredential", { userCredential });
+
+    return userCredential;
   };
 
   const resentVerification = async () => {
@@ -81,6 +96,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
+      if (user) {
+        getLoggedInUser(user);
+      }
       setLoading(false);
     });
     return unsubscribe;

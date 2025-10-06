@@ -1,7 +1,8 @@
+const server_context = "/pothole-core/v1/api";
 const APIs = {
   USER: {
     CREATE: "/api/users",
-    GET: "/api/users",
+    GET_USER_INFO: `${server_context}/login`,
     UPDATE: "/api/users",
   },
   AUTH: {
