@@ -3,6 +3,7 @@ import { useAuth } from "../context/auth-context";
 import { useQuery } from "@tanstack/react-query";
 import { User, Mail, Calendar, MapPin, LogOut, Edit3 } from "lucide-react";
 import ProfileEditForm from "../components/profile_edit";
+import type { ProfileData } from "../types";
 
 interface UserStats {
   totalReports: number;
@@ -17,14 +18,6 @@ const mockUserStats: UserStats = {
   resolvedReports: 9,
   joinedDate: "2024-01-01",
 };
-
-interface ProfileData {
-  displayName: string;
-  bio: string;
-  isAnonymous: boolean;
-  isActive: boolean;
-  photoURL: string | null;
-}
 
 const fetchUserStats = async (): Promise<UserStats> => {
   return new Promise((resolve) => {
@@ -64,7 +57,7 @@ const Profile: React.FC = () => {
   const handleSaveProfile = (data: ProfileData) => {
     setProfileData(data);
     if (updateUserProfile) {
-      updateUserProfile();
+      updateUserProfile(data);
     }
     setIsEditing(false);
   };

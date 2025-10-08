@@ -20,6 +20,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { fetchLoggedInUserData } from "../services/auth-service";
+import type { LoginResponseData, ProfileData } from "../types";
 
 interface AuthContextType {
   currentUser: User | null;
@@ -29,7 +30,8 @@ interface AuthContextType {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   resentVerification: () => Promise<boolean>;
-  updateUserProfile: () => void;
+  updateUserProfile: (profileData: ProfileData) => void;
+  userProfile: LoginResponseData | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,6 +49,9 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<LoginResponseData | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   console.log(children, loading);
   const signup = async (email: string, password: string, name: string) => {
@@ -58,16 +63,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const getLoggedInUser = async (loggedInUser: User) => {
     const idTokeen = await loggedInUser.getIdToken();
     const userInfo = await fetchLoggedInUserData(idTokeen);
-    console.log("auth_context_userInfo", userInfo);
+    return userInfo;
   };
-
+  const logout = () => {
+    return signOut(auth);
+  };
   const login = async (email: string, password: string) => {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
       password,
     );
-    getLoggedInUser(userCredential.user);
+    const loggedInUserData = await getLoggedInUser(userCredential.user);
+    if (loggedInUserData) {
+      setUserProfile(loggedInUserData);
+    } else {
+      logout();
+    }
     console.log("auth_context_userCredential", { userCredential });
 
     return userCredential;
@@ -86,15 +98,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return signInWithPopup(auth, provider);
   };
 
-  const logout = () => {
-    return signOut(auth);
-  };
-
   const resetPassword = (email: string) => {
     return sendPasswordResetEmail(auth, email);
   };
 
-  const updateUserProfile = () => {};
+  const updateUserProfile = (profileData: ProfileData) => {
+    console.log("updating_profile", { profileData });
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -118,6 +128,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         resetPassword,
         resentVerification,
         updateUserProfile,
+        userProfile,
       }}
     >
       {!loading && children}

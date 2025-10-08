@@ -1,13 +1,17 @@
 import { APIs } from "../apis";
+import axios from "axios";
+import type { LoginResponseData } from "../types";
 
 const fetchLoggedInUserData = async (idToken: string) => {
-  const resp = await fetch(APIs.USER.GET_USER_INFO, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ idToken }),
-  });
-
-  console.log("auth_service_userInfo", resp);
+  try {
+    const resp = await axios.post<LoginResponseData>(APIs.USER.GET_USER_INFO, {
+      idToken,
+    });
+    console.log("auth_service_userInfo", resp.data);
+    return resp.data;
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+  }
 };
 
 export { fetchLoggedInUserData };

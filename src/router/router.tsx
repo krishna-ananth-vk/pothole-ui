@@ -6,6 +6,7 @@ import ProtectedRoute from "../components/protected-route";
 import Leaderboard from "../pages/leaderboard";
 import Profile from "../pages/profile";
 import Capture from "../pages/capture";
+import { APP_ROUTES } from "../utils/constants";
 
 const router = createBrowserRouter(
   [
@@ -21,7 +22,7 @@ const router = createBrowserRouter(
         </ProtectedRoute>
       ),
       children: [
-        { path: "dashboard", element: <Dashboard /> },
+        { path: APP_ROUTES.DASHBOARD, element: <Dashboard /> },
         { path: "leaderboard", element: <Leaderboard /> },
         { path: "profile", element: <Profile /> },
         { path: "capture", element: <Capture /> },

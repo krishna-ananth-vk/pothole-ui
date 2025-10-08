@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { User, Camera, X } from "lucide-react";
-
-interface ProfileData {
-  displayName: string;
-  bio: string;
-  isAnonymous: boolean;
-  isActive: boolean;
-  photoURL: string | null;
-}
+import type { ProfileData } from "../types";
 
 interface ProfileEditFormProps {
   initialData: ProfileData;
